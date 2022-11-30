@@ -49,6 +49,7 @@ def start_data_reading(config):
       logging.error(err)
   else:
     try:
+      cursor = cnx.cursor()
       cursor.execute(query)
       result = cursor.fetchall()
       return result
@@ -60,7 +61,7 @@ def start_data_reading(config):
       cnx.close()
 
 def main():
-  
+
   initialize_logging()
   properties = initialize_properties()
   """
