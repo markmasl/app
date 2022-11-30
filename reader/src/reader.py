@@ -26,8 +26,9 @@ api = Flask(__name__)
 
 @api.route('/info', methods=['GET'])
 def get_info():
-  d = os.environ['MY_POD_NAME','defaultname']
-  return jsonify({'podname':d})
+  p = os.environ['MY_POD_NAME','defaultname']
+  return jsonify({'podname':p})
+#  return jsonify({'podname':p, 'rowsintable':r})
 
 def start_api_server():
   api.run(debug=True, use_reloader=False, host='0.0.0.0', port=8080)
@@ -52,13 +53,13 @@ def start_data_reading(config):
       cursor = cnx.cursor()
       cursor.execute(query)
       result = cursor.fetchall()
-      return result
       logging.info(f"There are {result[(0)]} row(s) in the table")
     except mysql.connector.Error as err:
       logging.info(err.msg)
     else:
       cursor.close()
       cnx.close()
+      return result
 
 def main():
 
