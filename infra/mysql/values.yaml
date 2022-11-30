@@ -1,0 +1,12 @@
+architecture: replication
+auth:
+  rootPassword: secretRootPassword
+  database: app_db
+  username: app_username
+  password: app_password
+primary:
+  persistence:
+    enabled: false
+secondary:
+  persistence:
+    enabled: false

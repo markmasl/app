@@ -6,7 +6,7 @@ import yaml
 
 def initialize_logging():
     """
-    Initialize the logger once as the application starts up
+    Initialize the logger
     """
     logging_path = os.getenv('LOGGING_PATH', 'config/logging.yaml')
     if not os.path.exists(logging_path):
@@ -25,11 +25,3 @@ def initialize_properties():
         raise ValueError(f"No properties yaml file under {properties_path}")
     with open(properties_path, 'rt') as properties_file:
         return yaml.safe_load(properties_file)
-
-
-#def get_os_variable(name, default_value=None):
-#    value = os.getenv(name, default_value)
-#    if value is None:
-#        raise ValueError(f"No value for a variable {name}")
-#    return value
-

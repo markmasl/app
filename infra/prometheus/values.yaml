@@ -1,0 +1,18 @@
+podSecurityPolicy:
+  enabled: false
+alertmanager:
+  enabled: false
+alertmanagerFiles:
+  alertmanager.yml: ""
+configmapReload:
+  alertmanager:
+    enabled: false
+kubeStateMetrics:
+  enabled: false
+nodeExporter:
+  enabled: false
+server:
+  persistentVolume:
+    enabled: false
+pushgateway:
+  enabled: false

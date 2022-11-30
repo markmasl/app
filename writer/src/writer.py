@@ -1,5 +1,3 @@
-#!/root/app/env/bin/python3
-
 from faker import Faker
 
 from random import randint
@@ -22,16 +20,6 @@ import logging
 import logging.config
 
 from src.utils.file_utils import initialize_logging, initialize_properties
-
-
-#config = {
-#  'user': mysql_host,
-#  'password': 'app_password',
-#  'host': 'localhost',
-#  'database': 'app_db',
-#  'raise_on_warnings': True,
-#  'port':'7000'
-#}
 
 DB_NAME = 'app_db'
 
@@ -67,7 +55,7 @@ def start_api_server():
 """
 Measure processing time
 """
-REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+REQUEST_TIME = Summary('data_producing_seconds', 'Time spent for data producing and commiting to database')
 @REQUEST_TIME.time()
 def start_data_producing(config):
   """
@@ -131,7 +119,6 @@ def main():
   
   initialize_logging()
   properties = initialize_properties()
-
   """
   Configure settings
   """
@@ -164,4 +151,3 @@ def main():
 
 if __name__ == "__main__":
   main()
-

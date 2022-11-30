@@ -1,3 +1,3 @@
-from src.writer import main
+from src.reader import main
 
 main()

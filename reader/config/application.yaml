@@ -3,9 +3,8 @@ server:
         exporter_port: 9000
 
 mysql:
-        host: mysql-primary
+        host: mysql-secondary
         user: app_username
         password: app_password
         database: app_db
         port: 3306
-

@@ -1,0 +1,18 @@
+rbac:
+  pspEnabled: false
+  pspUseAppArmor: false
+adminUser: admin
+adminPassword: grafanapassword
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server
+      access: proxy
+      isDefault: true
+
+dashboardProviders: {}
+dashboards: {}

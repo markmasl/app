@@ -1,5 +1,3 @@
-#!/root/app/env/bin/python3
-
 from random import randint
 from time import sleep
 from datetime import date, datetime, timedelta
@@ -17,68 +15,75 @@ import socket
 
 import os
 
-config = {
-  'user': 'app_username',
-  'password': 'app_password',
-  'host': 'localhost',
-  'database': 'app_db',
-  'raise_on_warnings': True,
-  'port':'7000'
-}
-
 query = ("SELECT COUNT(*) FROM customers;")
 
+"""
+Initialize api server, set info path
+"""
 api = Flask(__name__)
 
 @api.route('/info', methods=['GET'])
 def get_info():
-  d = os.environ['HOME']
+  d = os.environ['MY_POD_NAME','defaultname']
   return jsonify({'podname':d})
 
 def start_api_server():
   api.run(debug=True, use_reloader=False, host='0.0.0.0', port=8080)
 
-REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+REQUEST_TIME = Summary('data_reading_seconds', 'Time spent for quering data in database')
 @REQUEST_TIME.time()
-def start_data_reading():
-  
-  cnx = mysql.connector.connect(**config)
-  cursor = cnx.cursor(buffered=True)
-#  delay = randint(1,2)
-#  sleep(delay) 
-
-  try:
-    cursor.execute(query)
-    result = cursor.fetchall()
-    return result
-    print(f"There are {result[(0)]} row(s) in the table")
-  except mysql.connector.Error as err:
-    print(err.msg)
-  else:
-    cursor.close()
-    cnx.close()
-
-def check_db():
+def start_data_reading(config):
+"""
+Connecting to db and running query
+"""
   try:
     cnx = mysql.connector.connect(**config)
   except mysql.connector.Error as err:
     if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-      print("Something is wrong with your user name or password")
+      logging.error("Something is wrong with your user name or password")
     elif err.errno == errorcode.ER_BAD_DB_ERROR:
-      print("Database does not exist")
+      logging.error("Database does not exist")  
     else:
-      print(err)
+      logging.error(err)
   else:
-    cnx.close()
+    try:
+      cursor.execute(query)
+      result = cursor.fetchall()
+      return result
+      logging.info(f"There are {result[(0)]} row(s) in the table")
+    except mysql.connector.Error as err:
+      logging.info(err.msg)
+    else:
+      cursor.close()
+      cnx.close()
 
 def main():
-  check_db()
-  
-  start_http_server(8000)
+  """
+  Configure settings
+  """
+  server_api_port = properties.get('server',{}).get('api_port','8080')
+  server_exporter_port = properties.get('server',{}).get('exporter_port','9000')
+
+  mysql_host = properties.get('mysql',{}).get('host','localhost')
+  mysql_user = properties.get('mysql',{}).get('user','app_username')
+  mysql_password = properties.get('mysql',{}).get('password','app_password')
+  mysql_db = properties.get('mysql',{}).get('database','app_db')
+  mysql_port = properties.get('mysql',{}).get('port','7000')
+
+  config = {
+  'user': mysql_user,
+  'password': mysql_password,
+  'host': mysql_host,
+  'database': mysql_db,
+  'raise_on_warnings': True,
+  'port': mysql_port
+  }
+
+  start_http_server(server_exporter_port)
   threading.Thread(target=start_api_server, daemon=True).start()
     
   while True:
-    start_data_reading()
+    start_data_reading(config)
     sleep(1)
 
 if __name__ == "__main__":

@@ -1,0 +1,23 @@
+service:
+  servicePort: 8080
+  targetPort: 8080
+  type: NodePort
+  nodePort: 33808 
+
+disableLiveness: true
+disableRediness: true
+
+server:
+  name: reader
+  replicaCount: 3
+  metricsPath: /
+  image:
+    repository: localhost/reader
+    tag: 1.0.0
+    pullPolicy: IfNotPresent
+  resources:
+      limits:
+        cpu: 150
+        memory: 64Mi
+  envs:
+    MY_POD_NAME: "metadata.name"
