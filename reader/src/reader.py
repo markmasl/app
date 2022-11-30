@@ -15,6 +15,9 @@ import socket
 
 import os
 
+import logging
+import logging.config
+
 from src.utils.file_utils import initialize_logging, initialize_properties
 
 query = ("SELECT COUNT(*) FROM customers;")
