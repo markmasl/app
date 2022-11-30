@@ -33,9 +33,9 @@ def start_api_server():
 REQUEST_TIME = Summary('data_reading_seconds', 'Time spent for quering data in database')
 @REQUEST_TIME.time()
 def start_data_reading(config):
-"""
-Connecting to db and running query
-"""
+  """
+  Connecting to db and running query
+  """
   try:
     cnx = mysql.connector.connect(**config)
   except mysql.connector.Error as err:
