@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "appName.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ .Values.server.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "appName.name" . }}
+      release: {{ .Release.Name }}
+  replicas: {{ .Values.server.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.server.maxSurge | default 1 }}
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ template "appName.name" . }}
+        release: {{ .Release.Name }}
+{{- if .Values.prometheus }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.service.targetPort | quote }}
+        prometheus.io/path: {{ .Values.server.metricsPath | quote }}
+{{- end }}
+    spec:
+{{- if .Values.serviceaccount }}
+      serviceAccountName: {{ .Values.server.name }}
+{{- end }}
+      containers:
+      - name: {{ template "appName.name" . }}
+        image: {{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}
+        imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+        env:
+          {{- range $key, $value := .Values.server.envs }}
+          - name: {{ $key }}
+            valueFrom:
+              fieldRef:
+                fieldPath: {{ $value }}
+          {{- end }}
+{{- if not .Values.disableRediness }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.server.probe.rediness.path }}
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: {{ .Values.server.probe.rediness.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.server.probe.rediness.timeoutSeconds }}
+{{- end }}
+{{- if not .Values.disableLiveness }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.server.probe.liveness.path }}
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: {{ .Values.server.probe.liveness.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.server.probe.liveness.timeoutSeconds }}
+{{- end }}
+        volumeMounts:
+          - name: config
+            mountPath: /home/config
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Values.server.name }}
+

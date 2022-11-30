@@ -1,0 +1,20 @@
+---
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  simple:
+    format: '{"timestamp":"%(asctime)s", "level":"%(levelname)s", "thread": "%(threadName)s", "message":"%(message)s"}'
+    datefmt: '%Y-%m-%dT%H:%M:%S.000%z'
+
+handlers:
+
+  console_handler:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
+
+root:
+  level: INFO
+  handlers: [console_handler]

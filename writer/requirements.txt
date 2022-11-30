@@ -1,0 +1,5 @@
+Flask==2.0.3
+mysql-connector-python==8.0.31
+prometheus-client==0.15.0
+PyYAML==5.1.2
+Faker==14.2.1

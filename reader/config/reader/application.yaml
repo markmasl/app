@@ -1,0 +1,30 @@
+---
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  simple:
+    format: '{"timestamp":"%(asctime)s", "level":"%(levelname)s", "thread": "%(threadName)s", "message":"%(message)s"}'
+    datefmt: '%Y-%m-%dT%H:%M:%S.000%z'
+
+handlers:
+
+  console_handler:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
+
+root:
+  level: INFO
+  handlers: [console_handler]
+---
+VIRTUAL_HOST: "/"
+HOST: rabbitmq-ha
+PORT: 5672
+EXCHANGE_NAME: 'passport-recognition.tasks.v1'
+QUEUE_NAME: 'passport-recognition'
+ROUTING_KEY: '#'
+RECONNECT_NUMBER: 60
+DOWNLOAD_TIMEOUT: 30
+UPLOAD_TIMEOUT: 10

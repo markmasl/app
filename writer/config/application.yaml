@@ -1,0 +1,11 @@
+server:
+        api_port: 8080
+        exporter_port: 9000
+
+mysql:
+        host: localhost
+        user: app_username
+        password: app_password
+        database: app_db
+        port: 7000
+

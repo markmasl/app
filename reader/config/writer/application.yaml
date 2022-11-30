@@ -1,0 +1,22 @@
+---
+
+server:
+        api_port: 8080
+        exporter_port: 9000
+
+mysql:
+        host: localhost
+        user: app_username
+        password: app_password
+        database: app_db
+        port: 7000
+
+VIRTUAL_HOST: "/"
+HOST: rabbitmq-ha
+PORT: 5672
+EXCHANGE_NAME: 'passport-recognition.tasks.v1'
+QUEUE_NAME: 'passport-recognition'
+ROUTING_KEY: '#'
+RECONNECT_NUMBER: 60
+DOWNLOAD_TIMEOUT: 30
+UPLOAD_TIMEOUT: 10
