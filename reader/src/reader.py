@@ -60,6 +60,9 @@ def start_data_reading(config):
       cnx.close()
 
 def main():
+  
+  initialize_logging()
+  properties = initialize_properties()
   """
   Configure settings
   """
