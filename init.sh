@@ -1,18 +1,17 @@
 #!/bin/bash
-set +x
+set +ex
 
 #Setup docker
 apt-get update
 apt-get install ca-certificates curl gnupg lsb-release -y
 
 mkdir -p /etc/apt/keyrings
-
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 apt-get update
-apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+apt-get install docker-ce docker-ce-cli containerd.io -y
 
 
 #Setup minikube
@@ -65,9 +64,9 @@ helm install grafana grafana/grafana -f values.yaml --wait --timeout 10m0s --ver
 
 #Deploy apps
 cd ${workdir}/reader
-helm install reader devops/helm/reader --create-namespace -n app --wait --timeout 10m0s
+helm install reader devops/helm/reader --create-namespace -n app
 
 cd ${workdir}/writer
-helm install writer devops/helm/writer --create-namespace -n app --wait --timeout 10m0s
+helm install writer devops/helm/writer --create-namespace -n app
 
 
