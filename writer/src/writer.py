@@ -46,8 +46,8 @@ api = Flask(__name__)
 
 @api.route('/info', methods=['GET'])
 def get_info():
-  d = os.environ['MY_POD_NAME','defaultname']
-  return jsonify({'podname':d})
+  p = os.environ.get('MY_POD_NAME', 'defaultvalue')
+  return jsonify({ 'podname': p})
 
 def start_api_server():
   api.run(debug=True, use_reloader=False, host='0.0.0.0', port=8080)
