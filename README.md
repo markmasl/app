@@ -92,19 +92,19 @@ kubectl get ep -n app
 NAME                       ENDPOINTS                                         AGE
 reader                     172.17.0.7:8080,172.17.0.8:8080,172.17.0.9:8080   4h54m
 ```
-Reader app connects to the mysql replica and counts number of rows in table and logs result to sdtout
+Reader app connects to the mysql replica and counts number of rows in table and logs result to stdout
 ```console
 kubectl logs reader-b9ccb949d-65thf -n app --tail 10 -f
 {"timestamp":"2022-12-01T20:18:34.000+0000", "level":"INFO", "thread": "MainThread", "message":"There are 14310 row(s) in the table"}
 {"timestamp":"2022-12-01T20:18:35.000+0000", "level":"INFO", "thread": "MainThread", "message":"There are 14311 row(s) in the table"}
 ```
-There are two enpoints available for reader app:
+There are two endpoints available for reader app:
 ```console
 tcp        0      0 0.0.0.0:9000            0.0.0.0:*               LISTEN      1/python3
 tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      1/python3
 ```
 Port 9000 and path / is used for metric scraping (prometheus client_python library is used)
-Port 8080 is used for api access. Api is located under /info path and it returns podname and rowsintable values (flask framework is used):
+Port 8080 is used for api access. Api is located under /info path and it returns podname and rowsintable values (flask framework is used). Api is exposed through nodeport:
 ```console
 curl http://192.168.49.2:31808/info
 {
@@ -129,4 +129,4 @@ APO AE 17845 "}
 APO AE 17845, 2022-12-11 to database"}
 ```
 Port 9000 and path / is used for metric scraping (prometheus client_python library is used)
-Port 8080 is used for api access. Api is located under /info path and it returns podname (flask framework is used):
+Port 8080 is used for api access. Api is located under /info path and it returns podname (flask framework is used). Api is exposed through nodeport.
