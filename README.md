@@ -130,3 +130,9 @@ APO AE 17845, 2022-12-11 to database"}
 ```
 Port 9000 and path / is used for metric scraping (prometheus client_python library is used)
 Port 8080 is used for api access. Api is located under /info path and it returns podname (flask framework is used). Api is exposed through nodeport.
+
+##Error handling
+- Writer and Reader applications will fail if mysql is not available during app bootup;
+- Writer application will throw an error but will not fail if mysql becomes unresponsive during data inserting operation;
+- Reader application will throw an error but will not fail if mysql becomes unresponsive during data reading operation;
+- Writer and Reader applications will fail if db creds are incorrect;
