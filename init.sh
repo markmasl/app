@@ -52,22 +52,22 @@ minikube image load localhost/writer:1.0.0
 
 cd ${workdir}/infra/mysql
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install mysql bitnami/mysql -f values.yaml --namespace app --wait 10
+helm install mysql bitnami/mysql -f values.yaml --namespace app --wait --timeout 600
 
 cd ${workdir}/infra/prometheus
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm install prometheus prometheus-community/prometheus -f values.yaml --wait 10
+helm install prometheus prometheus-community/prometheus -f values.yaml --wait --timeout 600
 
 cd ${workdir}/infra/grafana
 helm repo add grafana https://grafana.github.io/helm-charts
-helm install grafana grafana/grafana -f values.yaml --wait 10
+helm install grafana grafana/grafana -f values.yaml --wait --timeout 900
 
 
 #Deploy apps
 cd ${workdir}/reader
-helm install reader devops/helm/reader -n app --wait 10
+helm install reader devops/helm/reader -n app --wait --timeout 900
 
 cd ${workdir}/writer
-helm install writer devops/helm/writer -n app --wait 10
+helm install writer devops/helm/writer -n app --wait --timeout 900
 
 
