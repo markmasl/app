@@ -9,10 +9,10 @@ configmapReload:
     enabled: false
 kubeStateMetrics:
   enabled: false
-nodeExporter:
+prometheus-node-exporter:
   enabled: false
 server:
   persistentVolume:
     enabled: false
-pushgateway:
+prometheus-pushgateway:
   enabled: false

@@ -52,7 +52,7 @@ minikube image load localhost/writer:1.0.0
 
 cd ${workdir}/infra/mysql
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install mysql bitnami/mysql -f values.yaml --namespace app --wait --timeout 10m0s
+helm install mysql bitnami/mysql --create-namespace -f values.yaml --namespace app --wait --timeout 10m0s
 
 cd ${workdir}/infra/prometheus
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
