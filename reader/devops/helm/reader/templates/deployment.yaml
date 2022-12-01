@@ -60,12 +60,11 @@ spec:
           initialDelaySeconds: {{ .Values.server.probe.liveness.initialDelaySeconds }}
           timeoutSeconds: {{ .Values.server.probe.liveness.timeoutSeconds }}
 {{- end }}
-        volumeMounts:
-          - name: config
-            mountPath: /home/config
-            readOnly: true
-      volumes:
-        - name: config
-          configMap:
-            name: {{ .Values.server.name }}
-
+#        volumeMounts:
+#          - name: config
+#            mountPath: /home/config
+#            readOnly: true
+#      volumes:
+#       - name: config
+#          configMap:
+#            name: {{ .Values.server.name }}
