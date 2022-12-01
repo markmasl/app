@@ -242,7 +242,7 @@ dashboards:
                       "uid": "PBFA97CFB590B2093"
                     },
                     "editorMode": "code",
-                    "expr": "sum(rate(data_producing_seconds{}[2m])) by (pod)",
+                    "expr": "sum(rate(data_producing_seconds_sum{}[2m])) by (pod)",
                     "hide": false,
                     "legendFormat": "__auto",
                     "range": true,
