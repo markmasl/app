@@ -2,7 +2,7 @@ service:
   servicePort: 8080
   targetPort: 8080
   type: NodePort
-  nodePort: 32808 
+  nodePort: 30808 
 
 disableLiveness: true
 disableRediness: true
