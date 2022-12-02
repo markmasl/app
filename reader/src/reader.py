@@ -22,6 +22,8 @@ from src.utils.file_utils import initialize_logging, initialize_properties
 
 query = ("SELECT COUNT(*) FROM customers;")
 
+result = "none"
+
 """
 Initialize api server, set info path
 """
@@ -45,11 +47,11 @@ def start_data_reading(config):
     cnx = mysql.connector.connect(**config)
   except mysql.connector.Error as err:
     if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-      logging.error("Something is wrong with your user name or password")
+      logging.info("Something is wrong with your user name or password")
     elif err.errno == errorcode.ER_BAD_DB_ERROR:
-      logging.error("Database does not exist")  
+      logging.info("Database does not exist")  
     else:
-      logging.error(err)
+      logging.info(err)
   else:
     try:
       cursor = cnx.cursor()
