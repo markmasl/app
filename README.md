@@ -1,7 +1,7 @@
 # Reader and Writer ecosystem
 
 ## Usage
-In order to setup required environment please run init.sh script with root privileges. Debian based OS is supported. Script is tested in Ubuntu 18.04 environment.
+In order to setup required environment please clone this repository and run init.sh script with root privileges. Debian based OS is supported. Script is tested in clean Ubuntu 18.04 environment. (It should be sufficient to have 2CPU & 4GB ram node)
 Once all dependencies are set and script successfully terminated, you should get:
 - reader and writer deployments in the app namespace together with mysql sts (master+slave)
 ```console
@@ -21,7 +21,7 @@ NAME                                 READY   STATUS    RESTARTS   AGE
 grafana-6bb6bbf7dd-n7gtq             1/1     Running   0          18m
 prometheus-server-54c94bf7d6-t47p5   2/2     Running   0          3h55m
 ```
-In order to connect to grafana, you must run port-forwarding on minukube host. That should expose grafana port to external world.
+In order to connect to grafana, you must run kubectl port-forwarding on minukube host. That should expose grafana port to external world.
 ```console
 kubectl port-forward svc/grafana --address=0.0.0.0 8888:80 2>&1 >/dev/null &
 ```
