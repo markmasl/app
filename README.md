@@ -149,7 +149,7 @@ curl http://192.168.49.2:30808/info
 }
 ```
 ## Error handling
-- Writer and Reader applications will fail if mysql is not available during app bootup;
+- Writer applications will fail if mysql is not available during app bootup, or app creds are incorrect;
 - Writer application will throw an error but will not fail if mysql becomes unresponsive during data inserting operation;
 - Reader application will throw an error but will not fail if mysql becomes unresponsive during data reading operation;
-- Writer and Reader applications will fail if db creds are incorrect;
+- Reader applications will not fail if db creds are incorrect, or db is not available at bootup;
