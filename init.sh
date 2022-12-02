@@ -1,7 +1,7 @@
 #!/bin/bash
 set +ex
 
-#Setup docker
+echo "########Setup docker########"
 apt-get update
 apt-get install ca-certificates curl gnupg lsb-release -y
 
@@ -14,26 +14,27 @@ apt-get update
 apt-get install docker-ce docker-ce-cli containerd.io -y
 
 
-#Setup minikube
+echo "########Install minikube########"
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 install minikube-linux-amd64 /usr/local/bin/minikube
 
 minikube config set driver docker
 minikube start --driver=docker --force
 
-#Setup helm
+echo "########Install helm########"
 wget https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz
 tar -zxvf helm-v3.10.2-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 helm version
 
-#Install kubectl
+echo "########Install kubectl########"
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version
 
 
-#Build docker images
+echo "########Build docker images########"
+
 workdir=$(pwd)
 cd ${workdir}/reader
 docker build --no-cache -t localhost/reader:1.0.0 -f devops/docker/Dockerfile .
@@ -43,11 +44,12 @@ docker build --no-cache -t localhost/writer:1.0.0 -f devops/docker/Dockerfile .
 
 cd ${workdir}
 
-#Push image to minikube
+echo "########Push image to minikube########"
+
 minikube image load localhost/reader:1.0.0
 minikube image load localhost/writer:1.0.0
 
-#Deploy infrastructure
+echo "########Deploy infrastructure (mysql,prometheus,grafana)########"
 
 cd ${workdir}/infra/mysql
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -61,8 +63,8 @@ cd ${workdir}/infra/grafana
 helm repo add grafana https://grafana.github.io/helm-charts
 helm install grafana grafana/grafana -f values.yaml --wait --timeout 10m0s --version 6.44.11
 
+echo "########Deploy apps (reader,writer)########"
 
-#Deploy apps
 cd ${workdir}/reader
 helm install reader devops/helm/reader --create-namespace -n app
 

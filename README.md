@@ -1,7 +1,7 @@
 # Reader and Writer ecosystem
 
 ## Usage
-In order to setup required environment please clone this repository and run init.sh script with root privileges. Debian based OS is supported. Script is tested in clean Ubuntu 18.04 environment. (It should be sufficient to have 2CPU & 4GB ram node)
+In order to setup required environment please clone this repository change directory to ./app and run init.sh script with root privileges. Debian based OS is supported. Script is tested in clean Ubuntu 18.04 environment. (It should be sufficient to have 2CPU & 4GB ram node)
 Once all dependencies are set and script successfully terminated, you should get:
 - reader and writer deployments in the app namespace together with mysql sts (master+slave)
 ```console
@@ -104,8 +104,20 @@ tcp        0      0 0.0.0.0:9000            0.0.0.0:*               LISTEN      
 tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      1/python3
 ```
 Port 9000 and path / is used for metric scraping (prometheus client_python library is used)
-Port 8080 is used for api access. Api is located under /info path and it returns podname and rowsintable values (flask framework is used). Api is exposed through nodeport:
+Port 8080 is used for api access. Api is located under /info path and it returns podname and rowsintable values (flask framework is used). Api is exposed through nodeport, and should be available within node through provided by minikube url:
 ```console
+minikube service list -n app
+|-----------|--------------------------|--------------|---------------------------|
+| NAMESPACE |           NAME           | TARGET PORT  |            URL            |
+|-----------|--------------------------|--------------|---------------------------|
+| app       | mysql-primary            | No node port |
+| app       | mysql-primary-headless   | No node port |
+| app       | mysql-secondary          | No node port |
+| app       | mysql-secondary-headless | No node port |
+| app       | reader                   | http/8080    | http://192.168.49.2:31808 |
+| app       | writer                   | http/8080    | http://192.168.49.2:30808 |
+|-----------|--------------------------|--------------|---------------------------|
+
 curl http://192.168.49.2:31808/info
 {
   "podname": "reader-b9ccb949d-65thf", 
@@ -130,7 +142,12 @@ APO AE 17845, 2022-12-11 to database"}
 ```
 Port 9000 and path / is used for metric scraping (prometheus client_python library is used)
 Port 8080 is used for api access. Api is located under /info path and it returns podname (flask framework is used). Api is exposed through nodeport.
-
+```console
+curl http://192.168.49.2:30808/info
+{
+  "podname": "writer-5c4fbd9dc4-xddpb"
+}
+```
 ## Error handling
 - Writer and Reader applications will fail if mysql is not available during app bootup;
 - Writer application will throw an error but will not fail if mysql becomes unresponsive during data inserting operation;
