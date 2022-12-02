@@ -59,7 +59,7 @@ helm install prometheus prometheus-community/prometheus -f values.yaml --wait --
 
 cd ${workdir}/infra/grafana
 helm repo add grafana https://grafana.github.io/helm-charts
-helm install grafana grafana/grafana -f values.yaml --wait --timeout 10m0s --version 8.3.1
+helm install grafana grafana/grafana -f values.yaml --wait --timeout 10m0s --version 6.44.11
 
 
 #Deploy apps

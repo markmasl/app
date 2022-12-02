@@ -37,7 +37,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install mysql bitnami/mysql --create-namespace -f values.yaml --namespace app --wait --timeout 10m0s --version 9.4.4
 ```
 - For mysql - bitnami/mysql helm chart was used (version 9.4.4)
-- For grafana - grafana/grafana (version 8.3.1)
+- For grafana - grafana/grafana (version 6.44.11)
 - For prometheus - prometheus-community/prometheus (version 18.3.0)
 
 In order to keep things simple, most of features and configs for these infrastracture services are disabled (no persistent volumes, no networkpolicies, no rbac-s, no tls), only required minimum left enabled. 
